@@ -28,7 +28,7 @@ function abrirTelaPedraPapelTesoura() {
     opcoes.style.width = '650px';
 
     // Adiciona as opções de jogadas
-    const pedra = criarOpcao('Pedra', 'img/pedra.jpg');  
+    const pedra = criarOpcao('Rock', 'img/pedra.jpg');  
     const papel = criarOpcao('Papel', 'img/papel.jpg');  
     const tesoura = criarOpcao('Tesoura', 'img/tesoura.jpg');  
 
