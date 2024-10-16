@@ -8,77 +8,81 @@ function resizeCanvas() {
     canvas.height = window.innerHeight;
 }
 
-// Carrega a imagem de fundo e redimensiona o canvas
 function drawImage() {
     const img = new Image();
-    img.src = 'img/area de trabalho.jpg';  // Caminho relativo para a imagem
+    img.src = 'img/area de trabalho vazia.jpg';  
 
     img.onload = function() {
-        const scale = Math.min(canvas.width / img.width, canvas.height / img.height);
-        const imgWidth = img.width * scale;
-        const imgHeight = img.height * scale;
-
-        const x = (canvas.width - imgWidth) / 2;
-        const y = (canvas.height - imgHeight) / 2;
-
+        // Agora, a imagem será desenhada ocupando todo o canvas, mesmo que distorça a proporção
         ctx.clearRect(0, 0, canvas.width, canvas.height); // Limpa o canvas
-        ctx.drawImage(img, x, y, imgWidth, imgHeight);
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);  // Estica a imagem para ocupar todo o canvas
 
-        desenharQuadradosClicaveis();  // Desenha as áreas clicáveis
+        desenharIcones();  // Desenha os ícones no lugar dos quadrados vermelhos
     };
 }
 
-// Função para desenhar os quadrados vermelhos nas áreas clicáveis
-function desenharQuadradosClicaveis() {
-    // Área da Pasta Vazia
-    ctx.strokeStyle = 'red';
-    ctx.lineWidth = 2;
-    ctx.strokeRect(8, 5, 50, 50);  // Pasta Vazia
+// Função para desenhar os ícones nas áreas clicáveis
+function desenharIcones() {
+    // Carrega os ícones
+    const pastaVaziaIcon = new Image();
+    pastaVaziaIcon.src = 'img/pasta vazia logo.jpg';
 
-    // Área do Confronto Visual
-    ctx.strokeStyle = 'red';
-    ctx.lineWidth = 2;
-    ctx.strokeRect(8, 90, 50, 50);  // Confronto Visual
+    const confrontoVisualIcon = new Image();
+    confrontoVisualIcon.src = 'img/confronto visual logo.jpg';
 
-    // Área da Brincadeira Honesta
-    ctx.strokeStyle = 'red';
-    ctx.lineWidth = 2;
-    ctx.strokeRect(8, 180, 50, 50);  // Brincadeira Honesta
+    const brincadeiraHonestaIcon = new Image();
+    brincadeiraHonestaIcon.src = 'img/bricadeira honesta logo.jpg';  // Corrigi o nome, caso esteja incorreto
+
+    // Ícone da Pasta Vazia
+    pastaVaziaIcon.onload = function() {
+        ctx.drawImage(pastaVaziaIcon, 8, 5, 75, 75);  
+    };
+
+    // Ícone do Confronto Visual
+    confrontoVisualIcon.onload = function() {
+        ctx.drawImage(confrontoVisualIcon, 8, 90, 75, 75); 
+    };
+
+    // Ícone da Brincadeira Honesta
+    brincadeiraHonestaIcon.onload = function() {
+        ctx.drawImage(brincadeiraHonestaIcon, 8, 180, 75, 75); 
+    };
 }
 
-// Detecta o clique no canvas e carrega os scripts corretos
+// Detecta cliques no canvas e executa scripts correspondentes
 canvas.addEventListener('click', function(event) {
     const x = event.offsetX;
     const y = event.offsetY;
 
     // Verifica se clicou na Pasta Vazia
-    if (x >= 8 && x <= 8 + 50 && y >= 5 && y <= 5 + 50) {
+    if (x >= 8 && x <= 8 + 75 && y >= 5 && y <= 5 + 75) {
         carregarScript('pasta vazia.js');
     }
 
     // Verifica se clicou no Confronto Visual
-    if (x >= 8 && x <= 8 + 50 && y >= 90 && y <= 90 + 50) {
+    if (x >= 8 && x <= 8 + 75 && y >= 90 && y <= 90 + 75) {
         carregarScript('Confronto visual.js');
     }
 
     // Verifica se clicou na Brincadeira Honesta
-    if (x >= 8 && x <= 8 + 50 && y >= 180 && y <= 180 + 50) {
+    if (x >= 8 && x <= 8 + 75 && y >= 180 && y <= 180 + 75) {
         carregarScript('brincadeira honesta.js');
     }
 });
 
-// Função para carregar os scripts dinamicamente
+// Função para carregar scripts dinamicamente
 function carregarScript(scriptName) {
     const script = document.createElement('script');
     script.src = scriptName;
     document.body.appendChild(script);
+    console.log(`Carregando o script: ${scriptName}`);
 }
 
-// Redimensiona o canvas e desenha a imagem quando a página carregar
+// Redimensiona o canvas e desenha a imagem ao carregar a página
 resizeCanvas();
 drawImage();
 
-// Redimensiona o canvas e redesenha a imagem quando a janela for redimensionada
+// Redimensiona o canvas e redesenha a imagem ao redimensionar a janela
 window.addEventListener('resize', () => {
     resizeCanvas();
     drawImage();
