@@ -28,7 +28,7 @@ function abrirTelaPedraPapelTesoura() {
     opcoes.style.width = '650px';
 
     // Adiciona as opções de jogadas
-    const pedra = criarOpcao('Rock', 'img/pedra.jpg');  
+    const pedra = criarOpcao('pedra', 'img/pedra.jpg');  
     const papel = criarOpcao('Papel', 'img/papel.jpg');  
     const tesoura = criarOpcao('Tesoura', 'img/tesoura.jpg');  
 
@@ -66,8 +66,9 @@ function criarOpcao(nome, caminhoImagem) {
 
     // Adiciona evento de clique à opção
     opcaoDiv.addEventListener('click', function() {
-        const jogadaCPU = jogadaVencedora(nome);
-        alert(`Você escolheu ${nome}!\nCPU escolheu ${jogadaCPU}!\nResultado: Derrota`);
+        const jogadaCPU = jogadaVencedora(nome); // A CPU faz a jogada vencedora
+        const resultado = calcularResultado(nome, jogadaCPU); // Calcula o resultado
+        alert(`Você escolheu ${nome}!\nAdversário escolheu ${jogadaCPU}!\nResultado: ${resultado}`);
     });
 
     return opcaoDiv;
@@ -75,12 +76,21 @@ function criarOpcao(nome, caminhoImagem) {
 
 // Função para a CPU sempre vencer
 function jogadaVencedora(jogadaJogador) {
-    if (jogadaJogador === 'Pedra') {
+    if (jogadaJogador === 'pedra') {
         return 'Papel';  // Papel vence Pedra
     } else if (jogadaJogador === 'Papel') {
         return 'Tesoura';  // Tesoura vence Papel
     } else {
         return 'Pedra';  // Pedra vence Tesoura
+    }
+}
+
+// Função para calcular o resultado
+function calcularResultado(jogadaJogador, jogadaCPU) {
+    if (jogadaJogador === jogadaCPU) {
+        return 'Empate';
+    } else {
+        return 'Derrota';  // A CPU sempre vai ganhar
     }
 }
 
