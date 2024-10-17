@@ -84,7 +84,7 @@ function iniciarContagemRegressiva(tela) {
     }, 1000);  // Conta de 1 em 1 segundo
 }
 
-// Função para exibir a imagem do rato
+// Função para exibir a imagem do rato e a explosão de cubinhos roxos
 function mostrarImagemRato(tela) {
     tela.innerHTML = '';  // Limpa a tela
 
@@ -94,6 +94,70 @@ function mostrarImagemRato(tela) {
     imgRato.style.width = '1000px';
     imgRato.style.height = '600px';
     tela.appendChild(imgRato);
+
+    // Inicia a explosão de cubinhos após a imagem do rato aparecer
+    iniciarExplosaoCubinhos();
+}
+
+// Função para iniciar a explosão de cubinhos roxos
+function iniciarExplosaoCubinhos() {
+    const canvas = document.createElement('canvas');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    canvas.style.position = 'absolute';
+    canvas.style.top = 0;
+    canvas.style.left = 0;
+    document.body.appendChild(canvas);
+
+    const ctx = canvas.getContext('2d');
+    const cubinhos = [];
+
+    // Função para criar cubinhos roxos com propriedades aleatórias
+    function criarCubinho() {
+        return {
+            x: window.innerWidth / 2,
+            y: window.innerHeight / 2,
+            size: Math.random() * 10 + 5,
+            dx: (Math.random() - 0.5) * 8,
+            dy: (Math.random() - 0.5) * 8,
+            color: 'rgba(128, 0, 128, 1)'  // Roxo
+        };
+    }
+
+    // Cria 50 cubinhos iniciais
+    for (let i = 0; i < 50; i++) {
+        cubinhos.push(criarCubinho());
+    }
+
+    // Função para atualizar e desenhar os cubinhos
+    function atualizarCubinhos() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        cubinhos.forEach((cubinho, index) => {
+            // Move o cubinho
+            cubinho.x += cubinho.dx;
+            cubinho.y += cubinho.dy;
+
+            // Desenha o cubinho
+            ctx.fillStyle = cubinho.color;
+            ctx.fillRect(cubinho.x, cubinho.y, cubinho.size, cubinho.size);
+
+            // Remove o cubinho se ele sair da tela
+            if (cubinho.x < 0 || cubinho.x > canvas.width || cubinho.y < 0 || cubinho.y > canvas.height) {
+                cubinhos.splice(index, 1);  // Remove o cubinho quando atingir a borda
+            }
+        });
+
+        // Continua a animação se ainda houver cubinhos
+        if (cubinhos.length > 0) {
+            requestAnimationFrame(atualizarCubinhos);
+        } else {
+            document.body.removeChild(canvas);  // Remove o canvas quando todos os cubinhos desaparecerem
+        }
+    }
+
+    // Inicia a animação
+    atualizarCubinhos();
 }
 
 // Chama a função para abrir a tela do Confronto Visual
